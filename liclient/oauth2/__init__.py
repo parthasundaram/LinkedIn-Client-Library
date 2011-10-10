@@ -414,10 +414,11 @@ those resources.
             'oauth_nonce': cls.make_nonce(),
             'oauth_version': cls.version,
         }
+
  
         defaults.update(parameters)
         parameters = defaults
- 
+
         if token:
             parameters['oauth_token'] = token.key
             if token.verifier:
@@ -587,6 +588,7 @@ class Client(httplib2.Http):
         redirections=httplib2.DEFAULT_MAX_REDIRECTS, connection_type=None):
         DEFAULT_CONTENT_TYPE = 'application/x-www-form-urlencoded'
 
+        
         if not isinstance(headers, dict):
             headers = {}
 
@@ -595,7 +597,9 @@ class Client(httplib2.Http):
         if body and method == "POST" and not is_multipart:
             parameters = dict(parse_qsl(body))
         else:
-            parameters = None
+            parameters = {}
+
+        parameters['oauth_callback'] = "http://localhost:8080/haha"
 
         req = Request.from_consumer_and_token(self.consumer, token=self.token,
             http_method=method, http_url=uri, parameters=parameters)
